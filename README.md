@@ -1,7 +1,21 @@
 # DS3231 Real-Time Clock Example with ESP32 
 
+## Description
+
+Basic API for the DS3231 RTC that interfaces between the ESP32 via I2C. 
+
 ## Files:
 
-### DS3231\_RTC.cpp
+### main/DS3231\_RTC.cpp
 
-### DS3231\_RTC.h
+Implementation of DS3231\_RTC class which defines methods and members that facillitate I2C protocol between ESP32 and the DS3231.
+
+### main/DS3231\_RTC.h
+
+Declares the DS3231\_RTC class, its methods and memebers.
+
+### main/RTC\_example.cpp
+
+## Requirements
+
+## Configuration
