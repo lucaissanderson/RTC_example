@@ -27,6 +27,10 @@ DS3231_RTC::DS3231_RTC() {
     uint8_t year = 0;
     uint8_t weekday = 0;
 
+    // alarm 1 data struct
+
+    // alarm 2 data struct
+
     // alarm settings
     bool alarm1_enabled = false;
     bool alarm2_enabled = false;
@@ -58,6 +62,9 @@ void DS3231_RTC::init(){
  * requirements: 
  * 	all arguments are assumed to be binary-coded-decimal(BCD)
  * 	see RTC_example.cpp for an exmaple conversion
+ *
+ * 	design considerations:
+ * 	    consolidate time members into a struct?
  */
 void DS3231_RTC::setTime() {
     uint8_t buf[8] = {
