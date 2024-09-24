@@ -8,8 +8,8 @@
 #include "DS3231_RTC.h"
 
 #define I2C_MASTER_PORT I2C_NUM_0
-#define I2C_MASTER_SCL_IO 22
-#define I2C_MASTER_SDA_IO 21
+#define I2C_MASTER_SCL_IO 9
+#define I2C_MASTER_SDA_IO 8
 #define I2C_MASTER_FREQ_HZ 100000
 #define I2C_SLAVE_ADDR 0x68
 #define I2C_MASTER_TX_BUF_DISABLE 0
@@ -56,7 +56,8 @@ void DS3231_RTC::init(){
 /*
  * Set the time on the DS3231
  * requirements: 
- * all arguments are assumed to be binary-coded-decimal(BCD)
+ * 	all arguments are assumed to be binary-coded-decimal(BCD)
+ * 	see RTC_example.cpp for an exmaple conversion
  */
 void DS3231_RTC::setTime() {
     uint8_t buf[8] = {
@@ -73,6 +74,10 @@ void DS3231_RTC::setTime() {
     ESP_ERROR_CHECK(i2c_send(0x0,buf,sizeof(buf)));
 }
 
+/*
+ * get time from the DS3231
+ * the resulting memeber values are in BCD
+ */
 void DS3231_RTC::getTime() {
     uint8_t buffer[8];
 
@@ -88,6 +93,33 @@ void DS3231_RTC::getTime() {
     year = buffer[7];
 }
 
+/**
+ * sets alarm 1
+ */
+void DS3231_RTC::setAlarm1(){
+
+}
+
+/**
+ * sets alarm 2
+ */
+void DS3231_RTC::setAlarm2(){
+
+}
+
+/**
+ * returns a float representing temperature (2's comp) read from DS3231
+ */
+float DS3231_RTC::readTemperature() {
+    float temperature = 0;
+    uint8_t buf[2];
+    
+    ESP_ERROR_CHECK(i2c_send_receive(0x11, buf, sizeof(buf)));
+
+    temperature = (float) ((float)(((buf[0] << 8) | buf[1]) >> 6) / 4);
+
+    return temperature;
+}
 
 /*******************************private*******************************/
 
@@ -114,6 +146,10 @@ esp_err_t DS3231_RTC::i2c_master_init() {
 
 /**
  * Function to send data over I2C
+ * args:
+ * 	addr : address to send pointer on DS3231
+ * 	data : data pointer
+ * 	len  : length of array data
  */
 esp_err_t DS3231_RTC::i2c_send(uint8_t addr, uint8_t *data, size_t len) {
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
@@ -131,6 +167,7 @@ esp_err_t DS3231_RTC::i2c_send(uint8_t addr, uint8_t *data, size_t len) {
 
 /**
  * Function to receive data over I2C
+ * INCOMPLETE!!! potentially uncessesary for this use-case
  */
 esp_err_t DS3231_RTC::i2c_receive(uint8_t *data) {
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
@@ -147,6 +184,10 @@ esp_err_t DS3231_RTC::i2c_receive(uint8_t *data) {
 
 /**
  * Function to direct pointer then read
+ * args:
+ * 	addr : address to send pointer for reading
+ * 	data : pointer to uint8 array to be overwritten by read from DS3231
+ * 	len  : size of array data
  */
 esp_err_t DS3231_RTC::i2c_send_receive(uint8_t addr, uint8_t *data, size_t len) {
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();

@@ -44,24 +44,10 @@ extern "C" void app_main(void)
     ESP_LOGI(TAG, "%x:%x:%x", rtc.hours, rtc.minutes, rtc.seconds);
 
     rtc.setTime();
-    
-    vTaskDelay(10000 / portTICK_PERIOD_MS);
-
     rtc.getTime();
 
     ESP_LOGI(TAG, "%x:%x:%x", rtc.hours, rtc.minutes, rtc.seconds);
 
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    rtc.getTime();
-    ESP_LOGI(TAG, "%x:%x:%x", rtc.hours, rtc.minutes, rtc.seconds);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    rtc.getTime();
-    ESP_LOGI(TAG, "%x:%x:%x", rtc.hours, rtc.minutes, rtc.seconds);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    rtc.getTime();
-    ESP_LOGI(TAG, "%x:%x:%x", rtc.hours, rtc.minutes, rtc.seconds);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
-    rtc.getTime();
-    ESP_LOGI(TAG, "%x:%x:%x", rtc.hours, rtc.minutes, rtc.seconds);
-
+    float temperature = 1.8*rtc.readTemperature() + 32.0;
+    ESP_LOGI(TAG, "temperature is %.2fC", temperature);
 }
